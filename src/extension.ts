@@ -31,6 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
             const accessToken = response.data.access_token;
             await context.secrets.store('instagramToken', accessToken);
             vscode.window.showInformationMessage('Logged in successfully!');
+
+            // Show the sidebar after login
+            vscode.commands.executeCommand('instagramReelsViewer.sidebar.focus');
         } catch (error) {
             vscode.window.showErrorMessage('Failed to log in. Please check your credentials and try again.');
             console.error(error);
@@ -38,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     // Register the sidebar view
-    const sidebarProvider = new InstagramReelsSidebarProvider(context.extensionUri);
+    const sidebarProvider = new InstagramReelsSidebarProvider(context);
     context.subscriptions.push(
         vscode.window.registerWebviewViewProvider(
             'instagramReelsViewer.sidebar',
@@ -50,18 +53,32 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 class InstagramReelsSidebarProvider implements vscode.WebviewViewProvider {
-    constructor(private readonly _extensionUri: vscode.Uri) {}
+    constructor(private readonly context: vscode.ExtensionContext) {}
 
     resolveWebviewView(webviewView: vscode.WebviewView) {
         webviewView.webview.options = {
             enableScripts: true,
-            localResourceRoots: [this._extensionUri],
+            localResourceRoots: [this.context.extensionUri],
         };
 
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+        this._getHtmlForWebview(webviewView.webview).then(html => {
+            webviewView.webview.html = html;
+        });
     }
 
-    private _getHtmlForWebview(webview: vscode.Webview) {
+    private async _getHtmlForWebview(webview: vscode.Webview) {
+        const accessToken = await this.context.secrets.get('instagramToken');
+        if (!accessToken) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <body>
+                    <p>Please log in to view Instagram Reels.</p>
+                </body>
+                </html>
+            `;
+        }
+
         return `
             <!DOCTYPE html>
             <html>
@@ -89,9 +106,12 @@ class InstagramReelsSidebarProvider implements vscode.WebviewViewProvider {
                     <!-- Reels will be loaded here -->
                 </div>
                 <script>
+                    const accessToken = '${accessToken}';
+                    const container = document.getElementById('reels-container');
+
                     async function fetchReels() {
                         try {
-                            const response = await fetch('https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink&access_token=YOUR_ACCESS_TOKEN');
+                            const response = await fetch(\`https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink&access_token=\${accessToken}\`);
                             if (!response.ok) {
                                 throw new Error('Failed to fetch reels.');
                             }
@@ -105,7 +125,6 @@ class InstagramReelsSidebarProvider implements vscode.WebviewViewProvider {
 
                     async function loadReels() {
                         const reels = await fetchReels();
-                        const container = document.getElementById('reels-container');
                         if (reels.length === 0) {
                             container.innerHTML = '<p>No reels found.</p>';
                             return;
