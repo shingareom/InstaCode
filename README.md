@@ -1,55 +1,50 @@
-# instacode README
+# InstaVsCode
 
-This is the README for your extension "instacode". After writing up a brief description, we recommend including the following sections.
+Hey! This Open Source Project Is For The Insta Coders, which means those who want to use Instagram while using VS Code. This extension allows you to view Instagram Reels directly in your VS Code sidebar, so you can stay focused on coding without switching tabs.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Instagram Login**: Log in to your Instagram account directly from VS Code.
+- **Reels in Sidebar**: View your Instagram Reels in a dedicated sidebar.
+- **Auto-Scroll**: Automatically scroll through reels without lifting a finger.
+- **Toggleable Sidebar**: Easily show/hide the Instagram Reels sidebar.
 
-For example if there is an image subfolder under your extension project workspace:
+### Screenshots
 
-\!\[feature X\]\(images/feature-x.png\)
+![Instagram Reels Sidebar](images/feature-x.png) // Gonna Add Some Picture
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- **VS Code**: Version 1.98.0 or higher.
+- **Instagram Account**: You need an Instagram account to log in and view reels.
+- **Instagram App**: You must create an Instagram app on the [Facebook Developer Portal](https://developers.facebook.com/) to get `Client ID` and `Client Secret`.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `instaVsCode.enable`: Enable/disable this extension.
+* `instaVsCode.autoScroll`: Enable/disable auto-scroll for reels.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- **Rate Limits**: Instagram APIs have rate limits. If you encounter issues, wait and try again later.
+- **Access Token Expiry**: Instagram access tokens expire after a short period. You may need to log in again.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Initial release of InstaVsCode.
 
 ### 1.0.1
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
+// Commit Soon
 ---
 
-## Following extension guidelines
+## Following Extension Guidelines
 
 Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
 
@@ -63,7 +58,7 @@ You can author your README using Visual Studio Code. Here are some useful editor
 * Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
 * Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
 
-## For more information
+## For More Information
 
 * [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
